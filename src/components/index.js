@@ -6,5 +6,26 @@ import LogoutBtn from "./Header/LogoutBtn";
 import Button from "./Button/Button";
 import Input from "./Input/Input";
 import Select from "./Select/Select";
+import RTE from "./RTE/RTE";
+import Signup from "./Signup/Signup";
+import Login from "./Login/Login";
+import PostForm from "./post-form/PostForm";
+import PostCard from "./PostCard/PostCard";
+import AuthLayout from "./AuthLayout/AuthLayout";
 
-export { Header, Footer, Container, Logo, LogoutBtn, Button, Input, Select };
+export {
+  Header,
+  Footer,
+  Container,
+  Logo,
+  LogoutBtn,
+  Button,
+  Input,
+  Select,
+  RTE,
+  Signup as SignupComponent,
+  Login,
+  PostForm,
+  PostCard,
+  AuthLayout,
+};

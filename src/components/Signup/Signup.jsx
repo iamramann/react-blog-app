@@ -10,19 +10,21 @@ function Signup() {
   const naviage = useNavigate();
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-  const [register, handleSubmit] = useForm();
+  const { register, handleSubmit } = useForm();
   const create = async (data) => {
     setError("");
+    console.log(data);
     try {
       const userData = await authService.createAccount(data);
       if (userData) {
-        const userData = await authService.getCurrentUser(userData);
-        if (userData) {
-          dispatch(login(userData));
+        const currentUser = await authService.getCurrentUser(userData);
+        if (currentUser) {
+          dispatch(login(currentUser));
           naviage("/");
         }
       }
     } catch (e) {
+      console.log(e);
       setError(e.message);
     }
   };
