@@ -1,9 +1,10 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, Select, RTE } from "../../components/index";
-import appWriteService from "../../appwrite/config";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import databaseService from "../../appwrite/config";
 
 function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, control, getValues } =
@@ -16,17 +17,19 @@ function PostForm({ post }) {
       },
     });
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => {
+    return state.auth.userData;
+  });
   const submit = async (data) => {
     if (post) {
       const file = data.image[0]
-        ? appWriteService.uploadFile(data.image[0])
+        ? databaseService.uploadFile(data.image[0])
         : null;
       if (file) {
-        appWriteService.deleteFile(post.featuredImage);
+        databaseService.deleteFile(post.featuredImage);
       }
 
-      const dbPost = await appWriteService.updatePost(post.$id, {
+      const dbPost = await databaseService.updatePost(post.$id, {
         ...data,
         featuredImage: file ? file.$id : undefined,
       });
@@ -34,16 +37,20 @@ function PostForm({ post }) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      const file = await appWriteService.uploadFile(data.image[0]);
+      console.log(">> Inside Post else");
+
+      const file = await databaseService.uploadFile(data.image[0]);
+      console.log(file);
       if (file) {
+        console.log(">> Inside file If");
         const fileId = file.$id;
         data.featuredImage = fileId;
-        const dbPost = await appWriteService.createPost({
+        const dbPost = await databaseService.createPost({
           ...data,
           userId: userData.$id,
         });
         if (dbPost) {
-          navigate(`post/${dbPost.$id}`);
+          navigate(`/post/${dbPost.$id}`);
         }
       }
     }
@@ -51,11 +58,9 @@ function PostForm({ post }) {
 
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
-      return value
-        .trim()
-        .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]/g, "-")
-        .replace(/\s/g, "-");
+      return value.trim().toLowerCase().replace(" ", "-");
+      // .replace(/^[a-zA-Z\d\s]/g, "-");
+      // .replace(/\s/g, "-");
     }
     return "";
   }, []);
@@ -114,7 +119,7 @@ function PostForm({ post }) {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
+              src={databaseService.getFilePreview(post.featuredImage)}
               alt={post.title}
               className="rounded-lg"
             />

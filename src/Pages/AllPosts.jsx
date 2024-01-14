@@ -15,13 +15,14 @@ function AllPosts() {
     <div>
       <Container>
         <div className="flex flex-wrap">
-          {posts.map((post) => {
-            return (
-              <div key={post.$id} className="p-2 w-1/4">
-                <PostCard post={post} />;
-              </div>
-            );
-          })}
+          {posts &&
+            posts.map((post) => {
+              return (
+                <div key={post.$id} className="p-2 w-1/4">
+                  <PostCard post={post} />;
+                </div>
+              );
+            })}
         </div>
       </Container>
     </div>
