@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import authService from "../../appwrite/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { login as authLogin, login } from "../../store/authSlice";
-import { Button, Input, Logo } from "../index";
+import { Button, Input, Logo, Eye, EyeSlash } from "../index";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
@@ -11,6 +11,8 @@ function Signup() {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
+  const [passwordType, setPasswordType] = useState("password");
+
   const create = async (data) => {
     setError("");
     console.log(data);
@@ -28,6 +30,10 @@ function Signup() {
       setError(e.message);
     }
   };
+
+  function togglePassword(type) {
+    setPasswordType(type);
+  }
 
   return (
     <>
@@ -75,14 +81,21 @@ function Signup() {
                   },
                 })}
               />
-              <Input
-                label="Password: "
-                placeholder="Enter your password"
-                type="password"
-                {...register("password", {
-                  required: true,
-                })}
-              />
+              <div className="flex relative">
+                <Input
+                  label="Password: "
+                  placeholder="Enter your password"
+                  type={passwordType}
+                  {...register("password", {
+                    required: true,
+                  })}
+                />
+                {passwordType === "password" ? (
+                  <Eye togglePassword={togglePassword} />
+                ) : (
+                  <EyeSlash togglePassword={togglePassword} />
+                )}
+              </div>
               <Button type="Submit" className="w-full">
                 Create Account
               </Button>

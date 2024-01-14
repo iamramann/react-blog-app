@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login as authLogin } from "../../store/authSlice";
-import { Button, Input, Logo } from "../index";
+import { Button, Input, Logo, Eye, EyeSlash } from "../index";
 import { useDispatch } from "react-redux";
 import authService from "../../appwrite/auth";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ function Login() {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
+  const [passwordType, setPasswordType] = useState("password");
 
   const login = async (data) => {
     setError("");
@@ -28,6 +29,9 @@ function Login() {
     }
   };
 
+  function togglePassword(type) {
+    setPasswordType(type);
+  }
   return (
     <div className="flex items-center justify-center w-full">
       <div
@@ -66,14 +70,22 @@ function Login() {
                 },
               })}
             />
-            <Input
-              label="Password: "
-              placeholder="Enter your password"
-              type="password"
-              {...register("password", {
-                required: true,
-              })}
-            />
+
+            <div className="flex relative">
+              <Input
+                label="Password: "
+                placeholder="Enter your password"
+                type={passwordType}
+                {...register("password", {
+                  required: true,
+                })}
+              />
+              {passwordType === "password" ? (
+                <Eye togglePassword={togglePassword} />
+              ) : (
+                <EyeSlash togglePassword={togglePassword} />
+              )}
+            </div>
 
             <Button children={"Sign In"} type="submit" />
           </div>

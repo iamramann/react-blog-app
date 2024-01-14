@@ -12,8 +12,11 @@ import Login from "./Login/Login";
 import PostForm from "./post-form/PostForm";
 import PostCard from "./PostCard/PostCard";
 import AuthLayout from "./AuthLayout/AuthLayout";
-
+import Eye from "./Icons/Eye";
+import EyeSlash from "./Icons/EyeSlash";
 export {
+  EyeSlash,
+  Eye,
   Header,
   Footer,
   Container,
